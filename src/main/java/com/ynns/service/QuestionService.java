@@ -1,6 +1,7 @@
 package com.ynns.service;
 
 import com.ynns.dto.QuestionDTO;
+import com.ynns.dto.PageDTO;
 import com.ynns.mapper.QuestionMapper;
 import com.ynns.mapper.UserMapper;
 import com.ynns.pojo.Question;
@@ -18,9 +19,22 @@ public class QuestionService {
     @Autowired
     UserMapper userMapper;
 
-    public List<QuestionDTO> list() {
-        List<Question> questionList = questionMapper.list();
+    public PageDTO list(Integer currentPage, Integer size) {
+        PageDTO pageDTO = new PageDTO();
+        Integer totalCount = questionMapper.count();
+        pageDTO.setPagination(totalCount,currentPage,size);
+
+        if (currentPage<1){
+            currentPage=1;
+        }
+        if (currentPage>pageDTO.getTotalPage()){
+            currentPage=pageDTO.getTotalPage();
+        }
+
+        Integer offset=size*(currentPage-1);
+        List<Question> questionList = questionMapper.list(offset,size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
+
         for (Question question : questionList) {
             User user=userMapper.findById(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
@@ -28,6 +42,8 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
-        return questionDTOList;
+
+        pageDTO.setQuestions(questionDTOList);
+        return pageDTO;
     }
 }
