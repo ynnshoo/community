@@ -36,29 +36,35 @@ public class AuthorizeController {
                            @RequestParam(name = "state") String state,
                            HttpServletRequest request,
                            HttpServletResponse response){
+
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(client_id);
         accessTokenDTO.setClient_secret(client_secret);
         accessTokenDTO.setCode(code);
         accessTokenDTO.setRedirect_uri(redirect_uri);
         accessTokenDTO.setState(state);
-        String accessToken=githubProvider.getAccessToken(accessTokenDTO);
 
+        String accessToken=githubProvider.getAccessToken(accessTokenDTO);
+        System.out.println("token==========>"+accessToken);
         GithubUser githubUser = githubProvider.getUser(accessToken);
-        System.out.println("controller=====>"+githubUser.getName());
-        if (githubUser!=null){
-            request.getSession().setAttribute("user",githubUser);
+        System.out.println("获取GitHub用户信息的名字："+githubUser.getName());
+        //登录成功
+        if (githubUser!=null&&githubUser.getId()!=null){
+//            //放入从GitHub获取到的用户信息到session中"user"
+//            request.getSession().setAttribute("user",githubUser);
             //登录成功 获取session、cookie
             User user = new User();
             user.setName(githubUser.getName());
             String token=UUID.randomUUID().toString();
+            System.out.println("UUID的token=====>"+token);
             user.setToken(token);
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
+            user.setAvatarUrl(githubUser.getAvatar_url());
             userMapper.insert(user);
+            //自动写入cookie
             response.addCookie(new Cookie("token",token));
-//            request.getSession().setAttribute("user",githubUser);
             return "redirect:/";
         }else{
             //登录失败

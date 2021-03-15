@@ -21,23 +21,7 @@
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-<!--            <ul class="nav navbar-nav">-->
-<!--                <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>-->
-<!--                <li><a href="#">Link</a></li>-->
-<!--                <li class="dropdown">-->
-<!--                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>-->
-<!--                    <ul class="dropdown-menu">-->
-<!--                        <li><a href="#">Action</a></li>-->
-<!--                        <li><a href="#">Another action</a></li>-->
-<!--                        <li><a href="#">Something else here</a></li>-->
-<!--                        <li role="separator" class="divider"></li>-->
-<!--                        <li><a href="#">Separated link</a></li>-->
-<!--                        <li role="separator" class="divider"></li>-->
-<!--                        <li><a href="#">One more separated link</a></li>-->
-<!--                    </ul>-->
-<!--                </li>-->
-<!--            </ul>-->
-            <form class="navbar-form navbar-left" main>
+            <form class="navbar-form navbar-left">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Search">
                 </div>
@@ -45,15 +29,12 @@
             </form>
             <ul class="nav navbar-nav navbar-right">
                 <li th:if="${session.user!=null}">
-                    <a href="/publish">发布</a>
-                </li>
-                <li th:if="${session.user==null}">
-                    <a href="https://github.com/login/oauth/authorize?client_id=Iv1.f65928dc9c38ef94&redirect_uri=http://localhost:2005/callback;&scope=user&state=STATE">登录</a>
+                     <a href="/publish">发布</a>
                 </li>
                 <li class="dropdown" th:if="${session.user!=null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                        aria-haspopup="true" aria-expanded="false" th:text="${session.user.getName()}"><span class="caret"></span></a>
-<!--                    {{session.user.getName(}}-->
+                    <!--                    {{session.user.getName(}}-->
                     <ul class="dropdown-menu">
                         <li><a href="#">消息中心</a></li>
                         <li><a href="#">个人资料</a></li>
@@ -62,6 +43,9 @@
                         <li><a href="#">退出登录</a></li>
                     </ul>
                 </li>
+                <li th:if="${session.user==null}">
+                    <a href="https://github.com/login/oauth/authorize?client_id=Iv1.f65928dc9c38ef94&redirect_uri=http://localhost:2005/callback&scope=user&state=STATE">登录</a>
+                </li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
@@ -69,27 +53,42 @@
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" >
-            <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span>发现</h2>
+            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>发起</h2>
             <hr>
-            <div class="media" th:each="question : ${questions}">
-                <div class="media-left">
-                    <a href="#">
-                        <img class="media-object img-rounded" th:src="${question.user.avatarUrl}">
-                    </a>
+            <form action="/publish" method="post">
+                <div class="form-group">
+                    <label form="title">问题标题(简单扼要)：</label>
+                    <input type="text" class="form-control" id="title" th:value="${title}" name="title" placeholder="问题标题.....">
                 </div>
-                <div class="media-body">
-                    <h4 class="media-heading" th:text="${question.getTitle()}">如何学习</h4>
-                    <span th:text="${question.getDescription()}">点击</span><br>
-                    <span class="text-desc">
-                        <span th:text="${question.getCommentCount()}"></span>个回复
-                        <span th:text="${question.getViewCount()}"></span>次浏览
-                        ～<span th:text="${#dates.format(question.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span>
-                    </span>
+                <div class="form-group">
+                    <label form="title">问题补充(必填，参照～)：</label>
+                    <textarea name="description" id="description" th:text="${description}" class="form-control" cols="30" rows="10"></textarea>
                 </div>
-            </div>
+                <div class="form-group">
+                    <label form="title">添加标签：</label>
+                    <input type="text" class="form-control" id="tag" th:value="${tag}" name="tag" placeholder="输入标签，以，号分隔">
+                </div>
+                <div class="container-fluid main">
+                    <div class="row" >
+                        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                            <div class="alert alert-danger col-lg-13 col-md-12 col-sm-12 col-xs-12" th:text="${error}" th:if="${error!=null}">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" >
+                            <button type="submit" class="btn btn-success btn-publish">
+                                发布
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" >
-            <h3>热门话题</h3>
+            <h3>问题发起指南</h3>
+            - 1111111111</br>
+            - 1111111111</br>
+            - 1111111111</br>
         </div>
     </div>
 </div>
