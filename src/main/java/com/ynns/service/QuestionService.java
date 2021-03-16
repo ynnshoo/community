@@ -4,6 +4,7 @@ import com.ynns.dto.QuestionDTO;
 import com.ynns.dto.PageDTO;
 import com.ynns.handle.exception.CustomizeErrorCode;
 import com.ynns.handle.exception.CustomizeException;
+import com.ynns.mapper.QuestionExtMapper;
 import com.ynns.mapper.QuestionMapper;
 import com.ynns.mapper.UserMapper;
 import com.ynns.pojo.Question;
@@ -22,6 +23,8 @@ public class QuestionService {
     QuestionMapper questionMapper;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    QuestionExtMapper questionExtMapper;
 
     public PageDTO list(Integer currentPage, Integer size) {
         PageDTO pageDTO = new PageDTO();
@@ -133,5 +136,19 @@ public class QuestionService {
             }
 
         }
+    }
+
+    public void incView(Integer id) {
+//        Question question = questionMapper.selectByPrimaryKey(id);
+//        Question updateQuestion = new Question();
+//        updateQuestion.setViewCount(question.getViewCount()+1);
+//        QuestionExample example = new QuestionExample();
+//        example.createCriteria().andIdEqualTo(id);
+//        questionMapper.updateByExampleSelective(updateQuestion, example);
+        //解决并发问题
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
     }
 }
