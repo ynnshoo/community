@@ -2,6 +2,8 @@ package com.ynns.service;
 
 import com.ynns.dto.QuestionDTO;
 import com.ynns.dto.PageDTO;
+import com.ynns.handle.exception.CustomizeErrorCode;
+import com.ynns.handle.exception.CustomizeException;
 import com.ynns.mapper.QuestionMapper;
 import com.ynns.mapper.UserMapper;
 import com.ynns.pojo.Question;
@@ -101,6 +103,9 @@ public class QuestionService {
 
     public QuestionDTO getById(Integer id) {
         Question question=questionMapper.selectByPrimaryKey(id);
+        if (question==null){
+            throw new CustomizeException(CustomizeErrorCode.QUESSION_NOT_FOUND);
+        }
         QuestionDTO questionDTO=new QuestionDTO();
         BeanUtils.copyProperties(question,questionDTO);
         User user=userMapper.selectByPrimaryKey(question.getCreator());
@@ -122,7 +127,11 @@ public class QuestionService {
 
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria().andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion, questionExample);
+            int updated=questionMapper.updateByExampleSelective(updateQuestion, questionExample);
+            if (updated!=1){
+                throw new CustomizeException(CustomizeErrorCode.QUESSION_NOT_FOUND);
+            }
+
         }
     }
 }
