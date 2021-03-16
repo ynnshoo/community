@@ -5,10 +5,12 @@ import com.ynns.dto.GithubUser;
 import com.ynns.mapper.UserMapper;
 import com.ynns.pojo.User;
 import com.ynns.provider.GithubProvider;
+import com.ynns.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
@@ -29,7 +31,7 @@ public class AuthorizeController {
     private String redirect_uri;
 
     @Autowired
-    UserMapper userMapper;
+    UserService userService;
 
     @GetMapping("/callback")
     public String callBack(@RequestParam(name = "code") String code,
@@ -59,10 +61,8 @@ public class AuthorizeController {
             System.out.println("UUID的token=====>"+token);
             user.setToken(token);
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(githubUser.getAvatar_url());
-            userMapper.insert(user);
+            userService.createOrUpdate(user);
             //自动写入cookie
             response.addCookie(new Cookie("token",token));
             return "redirect:/";
@@ -70,5 +70,17 @@ public class AuthorizeController {
             //登录失败
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response){
+        //移除session user
+        request.getSession().removeAttribute("user");
+        //移除cookie
+        Cookie cookie = new Cookie("token",null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }
