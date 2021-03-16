@@ -2,6 +2,7 @@ package com.ynns.interceptor;
 
 import com.ynns.mapper.UserMapper;
 import com.ynns.pojo.User;
+import com.ynns.pojo.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -10,6 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
 @Service
 public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
@@ -23,10 +26,13 @@ public class SessionInterceptor implements HandlerInterceptor {
                 //通过token的key找到value值
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
-                    User user = userMapper.findByToken(token);
-                    if (user != null) {
+
+                    UserExample userExample = new UserExample();
+                    userExample.createCriteria().andTokenEqualTo(token);
+                    List<User> userList = userMapper.selectByExample(userExample);
+                    if (userList.size() != 0) {
                         //从数据库中查找到Session信息
-                        request.getSession().setAttribute("user", user);
+                        request.getSession().setAttribute("user", userList.get(0));
                     }
                     break;
                 }
