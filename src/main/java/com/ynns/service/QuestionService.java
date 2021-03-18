@@ -61,7 +61,7 @@ public class QuestionService {
         return pageDTO;
     }
     //个人资料发布问题列表实现
-    public PageDTO listByUserId(int userId, Integer currentPage, Integer size) {
+    public PageDTO listByUserId(Long userId, Integer currentPage, Integer size) {
         PageDTO pageDTO = new PageDTO();
         Integer totalPage;
 
@@ -104,7 +104,7 @@ public class QuestionService {
         return pageDTO;
     }
 
-    public QuestionDTO getById(Integer id) {
+    public QuestionDTO getById(Long id) {
         Question question=questionMapper.selectByPrimaryKey(id);
         if (question==null){
             throw new CustomizeException(CustomizeErrorCode.QUESSION_NOT_FOUND);
@@ -120,6 +120,9 @@ public class QuestionService {
         if (question.getId()==null){
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
+            question.setViewCount(0);
+            question.setLikeCount(0);
+            question.setCommentCount(0);
             questionMapper.insert(question);
         }else {
             Question updateQuestion = new Question();
@@ -138,7 +141,7 @@ public class QuestionService {
         }
     }
 
-    public void incView(Integer id) {
+    public void incView(Long id) {
 //        Question question = questionMapper.selectByPrimaryKey(id);
 //        Question updateQuestion = new Question();
 //        updateQuestion.setViewCount(question.getViewCount()+1);
