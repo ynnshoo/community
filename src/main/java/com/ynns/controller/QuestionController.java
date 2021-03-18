@@ -1,8 +1,8 @@
 package com.ynns.controller;
 
-import com.ynns.dto.CommentCreateDTO;
 import com.ynns.dto.CommentDTO;
 import com.ynns.dto.QuestionDTO;
+import com.ynns.enums.CommentTypeEnum;
 import com.ynns.service.CommentService;
 import com.ynns.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class QuestionController {
         model.addAttribute("question",questionDTO);
 
         //回复
-        List<CommentDTO> commentDTOList=commentService.listByQuestionId(id);
+        List<CommentDTO> commentDTOList=commentService.listByQuestionId(id, CommentTypeEnum.QUESTION);
         model.addAttribute("comments",commentDTOList);
         return "question";
     }
