@@ -1,10 +1,12 @@
 package com.ynns.controller;
 
+import com.ynns.cache.TagCache;
 import com.ynns.dto.QuestionDTO;
 import com.ynns.mapper.QuestionMapper;
 import com.ynns.pojo.Question;
 import com.ynns.pojo.User;
 import com.ynns.service.QuestionService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,11 +30,14 @@ public class PublishController {
         model.addAttribute("description",question.getDescription());
         model.addAttribute("tag",question.getTag());
         model.addAttribute("id",question.getId());
+
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 
     @GetMapping("/publish")
-    public String publish(){
+    public String publish(Model model){
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 
@@ -48,6 +53,7 @@ public class PublishController {
         model.addAttribute("title",title);
         model.addAttribute("description",description);
         model.addAttribute("tag",tag);
+        model.addAttribute("tags", TagCache.get());
         if (title==null||title== ""){
             model.addAttribute("error","标题不能为空");
             return "publish";
@@ -58,6 +64,13 @@ public class PublishController {
             model.addAttribute("error","标签不能为空");
             return "publish";
         }
+
+        String invalid=TagCache.filterInvalid(tag);
+        if (StringUtils.isNotBlank(invalid)){
+            model.addAttribute("error","非法输入标签内容："+invalid);
+            return "publish";
+        }
+
         //是否是登录状态
         User user= (User) request.getSession().getAttribute("user");
 

@@ -40,7 +40,7 @@
                     <span class="text-desc">
                         <span th:text="${question.getCommentCount()}"></span>个回复
                         <span th:text="${question.getViewCount()}"></span>次浏览
-                        ～<span th:text="${#dates.format(question.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span>
+                        ～<span th:text="${#dates.format(question.getGmtCreate(),'yyyy-MM-dd HH:mm:ss')}"></span>
                     </span>
                 </div>
             </div>

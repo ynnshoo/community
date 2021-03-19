@@ -3,6 +3,7 @@ package com.ynns.controller;
 import com.ynns.dto.CommentDTO;
 import com.ynns.dto.QuestionDTO;
 import com.ynns.enums.CommentTypeEnum;
+import com.ynns.pojo.Question;
 import com.ynns.service.CommentService;
 import com.ynns.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,10 @@ public class QuestionController {
     public String question(@PathVariable("id") Long id,
                            Model model){
         QuestionDTO questionDTO=questionService.getById(id);
+        //标签
+        List<QuestionDTO> relatedQuestions = questionService.selectRelated(questionDTO);
+        model.addAttribute("relatedQuestions",relatedQuestions);
+
         //累加阅读数
         questionService.incView(id);
         model.addAttribute("question",questionDTO);
