@@ -13,7 +13,7 @@ public class TagCache {
         List<TagDTO> tagDTO=new ArrayList<>();
         TagDTO program=new TagDTO();
         program.setCategoryName("开发语言");
-        program.setTags(Arrays.asList("js","php","css","html","python"));
+        program.setTags(Arrays.asList("Java","js","php","css","html","python"));
         tagDTO.add(program);
 
         TagDTO framework=new TagDTO();

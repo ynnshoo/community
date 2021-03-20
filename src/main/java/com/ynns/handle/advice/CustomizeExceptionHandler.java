@@ -25,12 +25,14 @@ public class CustomizeExceptionHandler {
         String contentType = request.getContentType();
         if ("application/json".equals(contentType)){
             ResultDTO resultDTO;
+            System.out.println("111111111"+new ResultDTO<>());
             //返回JSON
             if (throwable instanceof CustomizeException){
                 resultDTO=ResultDTO.errorOf((CustomizeException)throwable);
             }else {
                 resultDTO=ResultDTO.errorOf(CustomizeErrorCode.SYS_ERROR);
             }
+            System.out.println("222222"+resultDTO);
             try {
                 response.setContentType("application/json");
                 response.setStatus(200);

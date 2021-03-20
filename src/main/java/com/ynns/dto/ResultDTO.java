@@ -37,6 +37,4 @@ public class ResultDTO<T> {
         resultDTO.setData(t);
         return resultDTO;
     }
-
-
 }

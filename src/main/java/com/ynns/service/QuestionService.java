@@ -63,7 +63,7 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
 
-        pageDTO.setQuestions(questionDTOList);
+        pageDTO.setData(questionDTOList);
         return pageDTO;
     }
     //个人资料发布问题列表实现
@@ -106,7 +106,7 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
 
-        pageDTO.setQuestions(questionDTOList);
+        pageDTO.setData(questionDTOList);
         return pageDTO;
     }
 

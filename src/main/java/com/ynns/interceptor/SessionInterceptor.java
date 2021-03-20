@@ -3,6 +3,7 @@ package com.ynns.interceptor;
 import com.ynns.mapper.UserMapper;
 import com.ynns.pojo.User;
 import com.ynns.pojo.UserExample;
+import com.ynns.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -17,6 +18,8 @@ import java.util.List;
 public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    NotificationService notificationService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -33,6 +36,8 @@ public class SessionInterceptor implements HandlerInterceptor {
                     if (userList.size() != 0) {
                         //从数据库中查找到Session信息
                         request.getSession().setAttribute("user", userList.get(0));
+                        Long unreadCount=notificationService.unreadCount(userList.get(0).getId());
+                        request.getSession().setAttribute("unreadCount",unreadCount);
                     }
                     break;
                 }

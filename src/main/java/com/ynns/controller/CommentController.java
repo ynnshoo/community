@@ -26,6 +26,7 @@ public class CommentController {
     public Object post(@RequestBody CommentCreateDTO commentCreateDTO,
                        HttpServletRequest request){
         User user= (User) request.getSession().getAttribute("user");
+        System.out.println(commentCreateDTO.toString());
         if (user==null){
             return ResultDTO.errorOf(CustomizeErrorCode.NOT_LOGIN);
         }
@@ -40,7 +41,7 @@ public class CommentController {
         comment.setGmtModified(comment.getGmtCreate());
         comment.setCommentator(user.getId());
         comment.setLikeCount(0L);
-        commentService.insert(comment);
+        commentService.insert(comment,user);
 //        HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
 //        objectObjectHashMap.put("message","Comment=====>成功");
         return ResultDTO.successOf();

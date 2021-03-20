@@ -4,7 +4,7 @@
 function post(){
     var questionId = $("#question_id").val();
     var content = $("#comment_content").val();
-    comment2target(questionId,1,content)
+    comment2target(questionId,1,content);
 }
 function comment2target(targetId,type,content){
     if (!content){
@@ -36,12 +36,10 @@ function comment2target(targetId,type,content){
                     alert(response.message);
                 }
             }
-            console.log(response);
+            // console.log(response);
         },
         dataType: "json"
     })
-    console.log(questionId);
-    console.log(content);
 }
 function comment(e){
     var commentId=e.getAttribute("data-id");
