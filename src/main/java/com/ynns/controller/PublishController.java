@@ -2,10 +2,9 @@ package com.ynns.controller;
 
 import com.ynns.cache.TagCache;
 import com.ynns.dto.QuestionDTO;
-import com.ynns.mapper.QuestionMapper;
 import com.ynns.pojo.Question;
 import com.ynns.pojo.User;
-import com.ynns.service.QuestionService;
+import com.ynns.service.impl.QuestionService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,19 +23,19 @@ public class PublishController {
 
     @GetMapping("/publish/{id}")
     public String edit(@PathVariable(name = "id") Long id,
-                       Model model){
+                       Model model) {
         QuestionDTO question = questionService.getById(id);
-        model.addAttribute("title",question.getTitle());
-        model.addAttribute("description",question.getDescription());
-        model.addAttribute("tag",question.getTag());
-        model.addAttribute("id",question.getId());
+        model.addAttribute("title", question.getTitle());
+        model.addAttribute("description", question.getDescription());
+        model.addAttribute("tag", question.getTag());
+        model.addAttribute("id", question.getId());
 
         model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 
     @GetMapping("/publish")
-    public String publish(Model model){
+    public String publish(Model model) {
         model.addAttribute("tags", TagCache.get());
         return "publish";
     }
@@ -49,33 +48,35 @@ public class PublishController {
             @RequestParam(value = "id", required = false) Long id,
             HttpServletRequest request,
             Model model
-    ){
-        model.addAttribute("title",title);
-        model.addAttribute("description",description);
-        model.addAttribute("tag",tag);
+    ) {
+        model.addAttribute("title", title);
+        model.addAttribute("description", description);
+        model.addAttribute("tag", tag);
         model.addAttribute("tags", TagCache.get());
-        if (title==null||title== ""){
-            model.addAttribute("error","标题不能为空");
+        if (title == null || title == "") {
+            model.addAttribute("error", "标题不能为空");
             return "publish";
-        }if (description==null||description== ""){
-            model.addAttribute("error","问题补充不能为空");
+        }
+        if (description == null || description == "") {
+            model.addAttribute("error", "问题补充不能为空");
             return "publish";
-        }if (tag==null||tag== ""){
-            model.addAttribute("error","标签不能为空");
+        }
+        if (tag == null || tag == "") {
+            model.addAttribute("error", "标签不能为空");
             return "publish";
         }
 
-        String invalid=TagCache.filterInvalid(tag);
-        if (StringUtils.isNotBlank(invalid)){
-            model.addAttribute("error","非法输入标签内容："+invalid);
+        String invalid = TagCache.filterInvalid(tag);
+        if (StringUtils.isNotBlank(invalid)) {
+            model.addAttribute("error", "非法输入标签内容：" + invalid);
             return "publish";
         }
 
         //是否是登录状态
-        User user= (User) request.getSession().getAttribute("user");
+        User user = (User) request.getSession().getAttribute("user");
 
-        if (user==null){
-            model.addAttribute("error","用户未登录");
+        if (user == null) {
+            model.addAttribute("error", "用户未登录");
             return "publish";
         }
         Question question = new Question();

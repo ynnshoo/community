@@ -19,20 +19,20 @@ import java.io.PrintWriter;
 public class CustomizeExceptionHandler {
     @ExceptionHandler(Exception.class)
     ModelAndView handle(HttpServletRequest request,
-                  HttpServletResponse response,
-                  Throwable throwable,
-                  Model model) {
+                        HttpServletResponse response,
+                        Throwable throwable,
+                        Model model) {
         String contentType = request.getContentType();
-        if ("application/json".equals(contentType)){
+        if ("application/json".equals(contentType)) {
             ResultDTO resultDTO;
-            System.out.println("111111111"+new ResultDTO<>());
+            System.out.println("111111111" + new ResultDTO<>());
             //返回JSON
-            if (throwable instanceof CustomizeException){
-                resultDTO=ResultDTO.errorOf((CustomizeException)throwable);
-            }else {
-                resultDTO=ResultDTO.errorOf(CustomizeErrorCode.SYS_ERROR);
+            if (throwable instanceof CustomizeException) {
+                resultDTO = ResultDTO.errorOf((CustomizeException) throwable);
+            } else {
+                resultDTO = ResultDTO.errorOf(CustomizeErrorCode.SYS_ERROR);
             }
-            System.out.println("222222"+resultDTO);
+            System.out.println("222222" + resultDTO);
             try {
                 response.setContentType("application/json");
                 response.setStatus(200);
@@ -44,19 +44,17 @@ public class CustomizeExceptionHandler {
                 e.printStackTrace();
             }
             return null;
-        }else{
+        } else {
             //错误页面跳转
             //        HttpStatus httpStatus=getStatus(request);
-            if (throwable instanceof CustomizeException){
+            if (throwable instanceof CustomizeException) {
                 model.addAttribute("message", throwable.getMessage());
-            }else {
+            } else {
                 model.addAttribute("message", CustomizeErrorCode.SYS_ERROR.getMessage());
             }
             return new ModelAndView("error");
         }
     }
-
-
 
 
 //    private HttpStatus getStatus(HttpServletRequest request) {

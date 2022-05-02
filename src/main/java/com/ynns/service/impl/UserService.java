@@ -1,4 +1,4 @@
-package com.ynns.service;
+package com.ynns.service.impl;
 
 import com.ynns.mapper.UserMapper;
 import com.ynns.pojo.User;
@@ -17,15 +17,15 @@ public class UserService {
         UserExample example = new UserExample();
         example.createCriteria().andAccountIdEqualTo(user.getAccountId());
         List<User> userList = userMapper.selectByExample(example);
-        if (userList.size()==0){
+        if (userList.size() == 0) {
             //插入
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             userMapper.insert(user);
-        }else{
+        } else {
             //更新
             User dbUser = userList.get(0);
-            User updateUser=new User();
+            User updateUser = new User();
             updateUser.setGmtCreate(System.currentTimeMillis());
             updateUser.setAvatarUrl(user.getAvatarUrl());
             updateUser.setName(user.getName());

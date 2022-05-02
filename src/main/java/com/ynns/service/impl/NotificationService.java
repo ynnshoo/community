@@ -1,4 +1,4 @@
-package com.ynns.service;
+package com.ynns.service.impl;
 
 import com.ynns.dto.NotificationDTO;
 import com.ynns.dto.PageDTO;
@@ -29,32 +29,32 @@ public class NotificationService {
 
         NotificationExample notificationExample = new NotificationExample();
         notificationExample.createCriteria().andReceiverEqualTo(id);
-        Integer totalCount = (int)notificationMapper.countByExample(notificationExample);
+        Integer totalCount = (int) notificationMapper.countByExample(notificationExample);
 
-        if (totalCount%size==0){
-            totalPage=totalCount/size;
-        }else{
-            totalPage=totalCount/size+1;
+        if (totalCount % size == 0) {
+            totalPage = totalCount / size;
+        } else {
+            totalPage = totalCount / size + 1;
         }
 
 
-        if (currentPage<1){
-            currentPage=1;
+        if (currentPage < 1) {
+            currentPage = 1;
         }
-        if (currentPage>totalPage){
-            currentPage=totalPage;
+        if (currentPage > totalPage) {
+            currentPage = totalPage;
         }
 
-        pageDTO.setPagination(totalPage,currentPage);
+        pageDTO.setPagination(totalPage, currentPage);
 
-        Integer offset=size*(currentPage-1);
+        Integer offset = size * (currentPage - 1);
         NotificationExample example = new NotificationExample();
 
         example.createCriteria().andReceiverEqualTo(id);
         example.setOrderByClause("gmt_create desc");
         List<Notification> notifications = notificationMapper.selectByExampleWithRowbounds(example, new RowBounds(offset, size));
 
-        if (notifications.size()==0){
+        if (notifications.size() == 0) {
             return pageDTO;
         }
 //        Set<Long> disUserIds = notifications.stream().map(notifiy -> notifiy.getNotifier()).collect(Collectors.toSet());
@@ -69,7 +69,7 @@ public class NotificationService {
 
         for (Notification notification : notifications) {
             NotificationDTO notificationDTO = new NotificationDTO();
-            BeanUtils.copyProperties(notification,notificationDTO);
+            BeanUtils.copyProperties(notification, notificationDTO);
             notificationDTO.setTypeName(NotificationTypeEnum.nameOfType(notification.getType()));
             notificationDTOS.add(notificationDTO);
         }
@@ -80,23 +80,23 @@ public class NotificationService {
     public Long unreadCount(Long userId) {
         NotificationExample notificationExample = new NotificationExample();
         notificationExample.createCriteria().andReceiverEqualTo(userId)
-        .andStatusEqualTo(NotificationStatusEnum.UNREAD.getStatus());
+                .andStatusEqualTo(NotificationStatusEnum.UNREAD.getStatus());
         return notificationMapper.countByExample(notificationExample);
     }
 
     public NotificationDTO read(Long id, User user) {
         Notification notification = notificationMapper.selectByPrimaryKey(id);
-        if (notification==null){
+        if (notification == null) {
             throw new CustomizeException(CustomizeErrorCode.NOTIFICATION_NOT_FOUND);
         }
-        if (!Objects.equals(notification.getReceiver(),user.getId())){
+        if (!Objects.equals(notification.getReceiver(), user.getId())) {
             throw new CustomizeException(CustomizeErrorCode.READ_NOTIFICATION_FAIL);
         }
         notification.setStatus(NotificationStatusEnum.READ.getStatus());
         notificationMapper.updateByPrimaryKey(notification);
 
         NotificationDTO notificationDTO = new NotificationDTO();
-        BeanUtils.copyProperties(notification,notificationDTO);
+        BeanUtils.copyProperties(notification, notificationDTO);
         notificationDTO.setTypeName(NotificationTypeEnum.nameOfType(notification.getType()));
         return notificationDTO;
     }

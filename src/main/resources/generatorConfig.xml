@@ -4,44 +4,68 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-<!--    <classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip" />-->
+    <!--已经在pom.xml中配置数据库 无用-->
+    <!--    <classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip" />-->
 
+    <!--注意这里的targetRuntime="MyBatis3Simple"，指定了不生成Example相关内容 MyBatis3是有Example-->
     <context id="DB2Tables" targetRuntime="MyBatis3">
         <!--分页-->
         <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>
+<!--        &lt;!&ndash; 生成的Java文件的编码 &ndash;&gt;-->
+<!--        <property name="javaFileEncoding" value="UTF-8" />-->
+<!--        &lt;!&ndash; 格式化java代码 &ndash;&gt;-->
+<!--        <property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter" />-->
+<!--        &lt;!&ndash; 格式化XML代码 &ndash;&gt;-->
+<!--        <property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter" />-->
+<!--        &lt;!&ndash;beginningDelimiter和endingDelimiter：指明数据库的用于标记数据库对象名的符号，例如：ORACLE使用双引号，MYSQL默认是`反引号； &ndash;&gt;-->
+<!--        <property name="beginningDelimiter" value="`" />-->
+<!--        <property name="endingDelimiter" value="`" />-->
+
+<!--        <commentGenerator>-->
+<!--            <property name="suppressDate" value="true"/>-->
+<!--            &lt;!&ndash; 是否去除自动生成的注释 true：是 ： false:否 &ndash;&gt;-->
+<!--            <property name="suppressAllComments" value="true"/>-->
+<!--        </commentGenerator>-->
+
+        <!-- jdbc连接信息 -->
         <jdbcConnection driverClass="org.h2.Driver"
                         connectionURL="jdbc:h2:~/community"
-                        userId=""
-                        password="">
+                        userId="ynns"
+                        password="123">
         </jdbcConnection>
 
-        <javaTypeResolver >
-            <property name="forceBigDecimals" value="false" />
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
+        <!-- 生成DO类的位置 -->
         <javaModelGenerator targetPackage="com.ynns.pojo" targetProject="src/main/java">
-            <property name="enableSubPackages" value="true" />
-            <property name="trimStrings" value="true" />
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="mapper"  targetProject="src/main/resources">
-            <property name="enableSubPackages" value="true" />
+        <!-- mapper映射文件生成的位置 -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.ynns.mapper"  targetProject="src/main/java">
-            <property name="enableSubPackages" value="true" />
+        <!-- mapper接口生成的位置 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.ynns.mapper" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="user" domainObjectName="User" ></table>
-        <table tableName="question" domainObjectName="Question" ></table>
-        <table tableName="comment" domainObjectName="Comment" ></table>
-        <table tableName="notification" domainObjectName="Notification" ></table>
-<!--            <property name="useActualColumnNames" value="true"/>-->
-<!--            <generatedKey column="ID" sqlStatement="DB2" identity="true" />-->
-<!--            <columnOverride column="DATE_FIELD" property="startDate" />-->
-<!--            <ignoreColumn column="FRED" />-->
-<!--            <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />-->
-
+        <!-- 指定要生成的表，主鍵，po类名 -->
+        <table tableName="user" domainObjectName="User"></table>
+        <table tableName="question" domainObjectName="Question"></table>
+        <table tableName="comment" domainObjectName="Comment"></table>
+        <table tableName="notification" domainObjectName="Notification"></table>
+        <!--<table>-->
+        <!--            <property name="useActualColumnNames" value="true"/> 默认false为驼峰命名 -->
+        <!--            <generatedKey column="ID" sqlStatement="DB2" identity="true" /> 插入的数据库根据不同文件返回-->
+        <!--            <columnOverride column="DATE_FIELD" property="startDate" /> 更改列名-->
+        <!--            <ignoreColumn column="FRED" />-->
+        <!--            <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />-->
+        <!--</table>-->
 
     </context>
 </generatorConfiguration>

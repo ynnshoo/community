@@ -10,27 +10,29 @@ public class ResultDTO<T> {
     private String message;
     private T data;
 
-    public static ResultDTO errorOf(Integer code,String message){
+    public static ResultDTO errorOf(Integer code, String message) {
         ResultDTO resultDTO = new ResultDTO();
         resultDTO.setCode(code);
         resultDTO.setMessage(message);
         return resultDTO;
     }
 
-    public static ResultDTO errorOf(CustomizeErrorCode errorCode){
-        return errorOf(errorCode.getCode(),errorCode.getMessage());
-    }
-    public static ResultDTO errorOf(CustomizeException throwable) {
-        return errorOf(throwable.getCode(),throwable.getMessage());
+    public static ResultDTO errorOf(CustomizeErrorCode errorCode) {
+        return errorOf(errorCode.getCode(), errorCode.getMessage());
     }
 
-    public static ResultDTO successOf(){
+    public static ResultDTO errorOf(CustomizeException throwable) {
+        return errorOf(throwable.getCode(), throwable.getMessage());
+    }
+
+    public static ResultDTO successOf() {
         ResultDTO resultDTO = new ResultDTO();
         resultDTO.setCode(200);
         resultDTO.setMessage("请求成功");
         return resultDTO;
     }
-    public static <T> ResultDTO successOf(T t){
+
+    public static <T> ResultDTO successOf(T t) {
         ResultDTO resultDTO = new ResultDTO();
         resultDTO.setCode(200);
         resultDTO.setMessage("请求成功");

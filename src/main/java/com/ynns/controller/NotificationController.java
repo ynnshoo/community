@@ -3,7 +3,7 @@ package com.ynns.controller;
 import com.ynns.dto.NotificationDTO;
 import com.ynns.enums.NotificationTypeEnum;
 import com.ynns.pojo.User;
-import com.ynns.service.NotificationService;
+import com.ynns.service.impl.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,17 +18,17 @@ public class NotificationController {
     private NotificationService notificationService;
 
     @GetMapping("/notification/{id}")
-    public String profile(@PathVariable(name = "id")Long id,
-                          HttpServletRequest request){
+    public String profile(@PathVariable(name = "id") Long id,
+                          HttpServletRequest request) {
 
-        User user= (User) request.getSession().getAttribute("user");
-        if (user==null){
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
             return "redirect:/";
         }
-        NotificationDTO notificationDTO=notificationService.read(id,user);
-        if (NotificationTypeEnum.REPLY_COMMENT.getType()==notificationDTO.getType()||NotificationTypeEnum.REPLY_QUESTION.getType()==notificationDTO.getType()){
-            return "redirect:/question/"+notificationDTO.getOuterid();
-        }else{
+        NotificationDTO notificationDTO = notificationService.read(id, user);
+        if (NotificationTypeEnum.REPLY_COMMENT.getType() == notificationDTO.getType() || NotificationTypeEnum.REPLY_QUESTION.getType() == notificationDTO.getType()) {
+            return "redirect:/question/" + notificationDTO.getOuterid();
+        } else {
             return "redirect:/";
         }
     }

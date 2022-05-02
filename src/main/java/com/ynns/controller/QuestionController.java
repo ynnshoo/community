@@ -3,9 +3,8 @@ package com.ynns.controller;
 import com.ynns.dto.CommentDTO;
 import com.ynns.dto.QuestionDTO;
 import com.ynns.enums.CommentTypeEnum;
-import com.ynns.pojo.Question;
-import com.ynns.service.CommentService;
-import com.ynns.service.QuestionService;
+import com.ynns.service.impl.CommentService;
+import com.ynns.service.impl.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,19 +22,19 @@ public class QuestionController {
 
     @GetMapping("/question/{id}")
     public String question(@PathVariable("id") Long id,
-                           Model model){
-        QuestionDTO questionDTO=questionService.getById(id);
+                           Model model) {
+        QuestionDTO questionDTO = questionService.getById(id);
         //标签
         List<QuestionDTO> relatedQuestions = questionService.selectRelated(questionDTO);
-        model.addAttribute("relatedQuestions",relatedQuestions);
+        model.addAttribute("relatedQuestions", relatedQuestions);
 
         //累加阅读数
         questionService.incView(id);
-        model.addAttribute("question",questionDTO);
+        model.addAttribute("question", questionDTO);
 
         //回复
-        List<CommentDTO> commentDTOList=commentService.listByQuestionId(id, CommentTypeEnum.QUESTION);
-        model.addAttribute("comments",commentDTOList);
+        List<CommentDTO> commentDTOList = commentService.listByQuestionId(id, CommentTypeEnum.QUESTION);
+        model.addAttribute("comments", commentDTOList);
         return "question";
     }
 }

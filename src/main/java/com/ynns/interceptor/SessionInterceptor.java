@@ -3,7 +3,7 @@ package com.ynns.interceptor;
 import com.ynns.mapper.UserMapper;
 import com.ynns.pojo.User;
 import com.ynns.pojo.UserExample;
-import com.ynns.service.NotificationService;
+import com.ynns.service.impl.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -24,7 +24,7 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Cookie[] cookies = request.getCookies();
-        if (cookies!=null && cookies.length!=0) {
+        if (cookies != null && cookies.length != 0) {
             for (Cookie cookie : cookies) {
                 //通过token的key找到value值
                 if (cookie.getName().equals("token")) {
@@ -36,8 +36,8 @@ public class SessionInterceptor implements HandlerInterceptor {
                     if (userList.size() != 0) {
                         //从数据库中查找到Session信息
                         request.getSession().setAttribute("user", userList.get(0));
-                        Long unreadCount=notificationService.unreadCount(userList.get(0).getId());
-                        request.getSession().setAttribute("unreadCount",unreadCount);
+                        Long unreadCount = notificationService.unreadCount(userList.get(0).getId());
+                        request.getSession().setAttribute("unreadCount", unreadCount);
                     }
                     break;
                 }

@@ -2,7 +2,9 @@ package com.ynns.provider;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.internal.OSSHeaders;
 import com.aliyun.oss.model.PutObjectRequest;
+import com.aliyun.oss.model.StorageClass;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,11 @@ public class AliyunProvider {
 
     //需要存储的bucketName
     @Value("${bucketName}")
-    private String bucketName ;
+    private String bucketName;
 
     //图片保存路径
     @Value("${picLocation}")
-    private  String picLocation;
+    private String picLocation;
 
     //连接keyId
     @Value("${accessKeyId}")
@@ -31,7 +33,7 @@ public class AliyunProvider {
     private String accessKeySecret;
 
     //
-    public String upload(){
+    public String upload() {
         // 创建OSSClient实例。
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
 
@@ -42,7 +44,7 @@ public class AliyunProvider {
 
         // 如果需要上传时设置存储类型和访问权限，请参考以下示例代码。
         // ObjectMetadata metadata = new ObjectMetadata();
-        // metadata.setHeader(OSSHeaders.OSS_STORAGE_CLASS, StorageClass.Standard.toString());
+//         metadata.setHeader(OSSHeaders.OSS_STORAGE_CLASS, StorageClass.Standard.toString());
         // metadata.setObjectAcl(CannedAccessControlList.Private);
         // putObjectRequest.setMetadata(metadata);
 

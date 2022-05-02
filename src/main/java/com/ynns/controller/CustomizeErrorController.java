@@ -23,17 +23,17 @@ public class CustomizeErrorController implements ErrorController {
     public ModelAndView errorHtml(HttpServletRequest request,
                                   Model model) {
         HttpStatus status = this.getStatus(request);
-        if (status.is4xxClientError()){
-            model.addAttribute("message","这是一个400的Client错误");
+        if (status.is4xxClientError()) {
+            model.addAttribute("message", "这是一个400的Client错误");
         }
-        if (status.is5xxServerError()){
-            model.addAttribute("message","这是一个500的Server错误");
+        if (status.is5xxServerError()) {
+            model.addAttribute("message", "这是一个500的Server错误");
         }
         return new ModelAndView("error");
     }
 
     private HttpStatus getStatus(HttpServletRequest request) {
-        Integer statusCode = (Integer)request.getAttribute("javax.servlet.error.status_code");
+        Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
         if (statusCode == null) {
             return HttpStatus.INTERNAL_SERVER_ERROR;
         } else {

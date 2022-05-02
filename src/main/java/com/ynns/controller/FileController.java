@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class FileController {
     @ResponseBody
     @PostMapping("/upload/file")
-    public FileDTO upload(){
+    public FileDTO upload() {
         FileDTO fileDTO = new FileDTO();
         fileDTO.setSuccess(1);
         fileDTO.setUrl("/images/loading.gif");

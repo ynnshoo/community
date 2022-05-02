@@ -1,8 +1,7 @@
 package com.ynns.enums;
 
 public enum NotificationStatusEnum {
-    UNREAD(0),READ(1)
-    ;
+    UNREAD(0), READ(1);
     private int status;
 
     NotificationStatusEnum(int status) {

@@ -5,6 +5,7 @@ public enum CommentTypeEnum {
     COMMENT(2);
 
     private Integer type;
+
     public Integer getType() {
         return type;
     }
@@ -15,7 +16,7 @@ public enum CommentTypeEnum {
 
     public static boolean isExist(Integer type) {
         for (CommentTypeEnum value : CommentTypeEnum.values()) {
-            if (value.getType()==type){
+            if (value.getType() == type) {
                 return true;
             }
         }

@@ -1,13 +1,14 @@
 /**
  * 提交回复
  */
-function post(){
+function post() {
     var questionId = $("#question_id").val();
     var content = $("#comment_content").val();
-    comment2target(questionId,1,content);
+    comment2target(questionId, 1, content);
 }
-function comment2target(targetId,type,content){
-    if (!content){
+
+function comment2target(targetId, type, content) {
+    if (!content) {
         alert("client----->回复列表不能为空")
     }
     $.ajax({
@@ -18,21 +19,21 @@ function comment2target(targetId,type,content){
         data: JSON.stringify({
             "parentId": targetId,
             "content": content,
-            "type":type
+            "type": type
         }),
-        success: function (response){
-            if (response.code==200){
+        success: function (response) {
+            if (response.code == 200) {
                 // $("#comment_section").hide();
                 window.location.reload();
-            }else{
+            } else {
                 //如果没有登录->确认是否登录->登录之后跳转到原来页面
-                if (response.code=2003){
-                    var isAccepted=confirm(response.message);
-                    if (isAccepted){
+                if (response.code = 2003) {
+                    var isAccepted = confirm(response.message);
+                    if (isAccepted) {
                         window.open("https://github.com/login/oauth/authorize?client_id=Iv1.f65928dc9c38ef94&redirect_uri=http://localhost:2005/callback;&scope=user&state=STATE");
                         window.localStorage.setItem("closable", true);
                     }
-                }else{
+                } else {
                     alert(response.message);
                 }
             }
@@ -41,11 +42,13 @@ function comment2target(targetId,type,content){
         dataType: "json"
     })
 }
-function comment(e){
-    var commentId=e.getAttribute("data-id");
-    var content = $("#input-"+commentId).val();
-    comment2target(commentId,2,content);
+
+function comment(e) {
+    var commentId = e.getAttribute("data-id");
+    var content = $("#input-" + commentId).val();
+    comment2target(commentId, 2, content);
 }
+
 /**
  * 展开二级评论
  */
@@ -133,20 +136,20 @@ function collapseComments(e) {
 /**
  * 展示tag页面
  */
-function showSelectTag(){
+function showSelectTag() {
     $("#select-tag").show();
 }
 
 /**
  * 标签
-  */
-function selectTag(e){
+ */
+function selectTag(e) {
     var value = e.getAttribute("data-tag");
-    var previous=$("#tag").val();
-    if (previous.indexOf(value)==-1){
-        if (previous){
-            $("#tag").val(previous+','+value)
-        }else{
+    var previous = $("#tag").val();
+    if (previous.indexOf(value) == -1) {
+        if (previous) {
+            $("#tag").val(previous + ',' + value)
+        } else {
             $("#tag").val(value);
         }
     }
